@@ -1,9 +1,3 @@
-
-provider "azurerm" {
-    subscription_id = "04e10b5f-7248-43c5-a56c-7fce5c485f28"
-    tenant_id       = "4b0911a0-929b-4715-944b-c03745165b3a"
-}
-
 resource "azurerm_resource_group" "dfdemo" {
   name     = "dfdemo"
   location = "East US"
