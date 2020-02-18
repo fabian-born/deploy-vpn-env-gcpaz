@@ -48,7 +48,6 @@ resource "google_compute_vpn_tunnel" "tunnel1" {
     google_compute_forwarding_rule.fr_udp4500,
   ]
 }
-
 resource "google_compute_route" "route1" {
   name       = "route1"
   network    = google_compute_network.network1.name
