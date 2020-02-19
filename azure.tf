@@ -7,14 +7,16 @@ resource "azurerm_virtual_network" "dfdemo" {
   name                = "dfdemo_network"
   location            = azurerm_resource_group.dfdemo.location
   resource_group_name = azurerm_resource_group.dfdemo.name
-  address_space       = ["172.16.0.0/16"]
+  #address_space       = ["172.16.0.0/16"]
+  address_space       = "${var.az_network_cidr}"
 
 }
 resource "azurerm_subnet" "subnet" {
     name           = "GatewaySubnet"
     resource_group_name  = azurerm_resource_group.dfdemo.name
     virtual_network_name = azurerm_virtual_network.dfdemo.name
-    address_prefix = "172.16.0.0/24"
+    #address_prefix = "172.16.0.0/24"
+    address_prefix =  "${var.az_gatewaysubnet_cidr}"
   }
 
 
@@ -25,6 +27,7 @@ resource "azurerm_public_ip" "vpn" {
 
   allocation_method = "Dynamic"
 }
+
 
 resource "azurerm_virtual_network_gateway" "dfdemo_vpn" {
   name                = "test"
@@ -45,7 +48,16 @@ resource "azurerm_virtual_network_gateway" "dfdemo_vpn" {
     subnet_id                     = azurerm_subnet.subnet.id
   }
 }
-# resource "azurerm_virtual_network_gateway_connection" "gcp" {
+
+#resource "azurerm_local_network_gateway" "gcp" {
+#  name                = "gcpgateway"
+#  resource_group_name = azurerm_resource_group.dfdemo.name
+#  location            = azurerm_resource_group.dfdemo.location
+#  gateway_address     = google_compute_address.vpn_static_ip.address
+#  address_space       = google_compute_network.gcp-network.name
+#}
+
+#resource "azurerm_virtual_network_gateway_connection" "gcp" {
 #  name                = "gcp"
 #  location            = azurerm_resource_group.dfdemo.location
 #  resource_group_name = azurerm_resource_group.dfdemo.name

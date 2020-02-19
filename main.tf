@@ -7,3 +7,7 @@ resource "random_string" "password" {
 output "password" {
   value = random_string.password.result
 }
+
+output "gcpname" {
+  value = google_compute_network.gcp-network.name
+}
