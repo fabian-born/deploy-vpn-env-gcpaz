@@ -23,6 +23,7 @@ resource "azurerm_subnet" "netsubnet" {
     virtual_network_name = azurerm_virtual_network.dfdemo.name
     address_prefix =  var.az_subnet1_cidr
   }
+  
 resource "azurerm_public_ip" "vpn" {
   name                = "dfdemo_vpn_pubip"
   location            = azurerm_resource_group.dfdemo.location
