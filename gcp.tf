@@ -4,9 +4,9 @@ resource "google_compute_vpn_gateway" "target_gateway" {
   network = google_compute_network.gcp-network.self_link
 }
 
-data "google_compute_subnetwork" "defaultsubnet" {
-  name = "default"
-}
+#data "google_compute_subnetwork" "defaultsubnet" {
+#  name = "default"
+#}
 
 resource "google_compute_network" "gcp-network" {
   name = "gcp-network"
@@ -49,23 +49,24 @@ resource "google_compute_forwarding_rule" "fr_udp4500" {
 
 resource "google_compute_vpn_tunnel" "tunnel1" {
   name          = "tunnel1"
-  peer_ip       = data.azurerm_public_ip.vpn.ip_address
+  peer_ip       = azurerm_public_ip.vpn.ip_address
   shared_secret = random_string.password.result
 
   target_vpn_gateway = google_compute_vpn_gateway.target_gateway.self_link
+  local_traffic_selector = ["${var.gcp_subnet1_cidr}"]
 
   depends_on = [
     google_compute_forwarding_rule.fr_esp,
     google_compute_forwarding_rule.fr_udp500,
     google_compute_forwarding_rule.fr_udp4500,
+    azurerm_public_ip.vpn,
   ]
 }
 
 resource "google_compute_route" "route1" {
   name       = "azure"
   network    = google_compute_network.gcp-network.name
-  dest_range = azurerm_subnet.subnet.address_prefix
+  dest_range = azurerm_subnet.netsubnet.address_prefix
   priority   = 1000
-
   next_hop_vpn_tunnel = google_compute_vpn_tunnel.tunnel1.self_link
 }
