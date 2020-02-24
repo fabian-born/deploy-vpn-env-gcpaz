@@ -1,0 +1,60 @@
+---
+- name: Create OCCM Server
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars:
+      site: "DEMOEnvironment"
+      company: NetApp
+  tasks:    
+# Wait for OCCM Instance
+    - name: Wait for SSH to come up
+      wait_for: host={{ occm_ip }} port=22 delay=60 timeout=320 state=started
+    - name: Wait for OCCM to come up
+      wait_for: host={{ occm_ip }} port=80 delay=60 timeout=600 state=started
+#Get Token
+    - name: Print Auth Domain
+      debug: msg={{auth0_domain}}
+    - name: Get Token
+      uri:
+        url: https://{{auth0_domain}}/oauth/token
+        method: POST
+        body_format: json
+        return_content: yes
+        body: {"grant_type":"refresh_token", "refresh_token": "{{refToken}}", "client_id": "{{client_id}}"}
+        status_code: 200,204,202
+      register: token_response
+      ignore_errors: no
+    - name: set token & token_type
+      set_fact: token="{{ (token_response.content|from_json).access_token }}"
+    - set_fact: token_type="{{ (token_response.content|from_json).token_type }}"
+# Register
+    - name: Register
+      uri:
+        url: http://{{occm_ip}}/occm/api/occm/setup-portal/register
+        method: POST
+        headers:
+           Referer: Ansible
+        return_content: yes
+        status_code: 200,204,202
+        timeout: 180
+      register: register_response  
+      ignore_errors: yes
+    - name: Print Client Id
+      debug: msg={{register_response.json.clientId}}
+# Perform Init
+    - name: Init
+      uri:
+        url: http://{{occm_ip}}/occm/api/occm/setup-portal/init
+        method: POST
+        body_format: json
+        headers:
+           Authorization: "{{token_type}} {{ token }}"
+           Referer: Ansible
+        body: {"adminUser":{"email":"{{portalUserName}}"},"site":"{{site}}","company":"{{company}}"}
+        status_code: 200,204,202
+        timeout: 180
+      register: setup_response  
+      ignore_errors: no
+    - name: OCCM IP
+      debug: msg=http://{{occm_ip}}  

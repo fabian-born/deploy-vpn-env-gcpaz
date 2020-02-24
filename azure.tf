@@ -80,3 +80,5 @@ resource "azurerm_virtual_network_gateway_connection" "gcp" {
 
   shared_key = random_string.password.result
 }
+
+#13.90.101.114
