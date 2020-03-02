@@ -11,14 +11,16 @@ image_sku               = "occm-byol"                                    # image
 image_version           = "latest"                                       # image version
 ###################################################
 managed_disk_type       = "Premium_LRS"                                  # os root disk type
-vm_admin_user           = "admin"                                             # admin user name
+vm_admin_user           = "fabianborn"                                             # admin user name
 vm_admin_password       = "netapp123!NetApp123!"                                             # admin password
 instance_type           = "Standard_DS1_v2"                              # instance type             
 ###################################################
 gcp_enabled             = "true"
 vpn_enabled             = "false"
 ansible_provision_file  = "./ansible/occm_setup.yaml"
-
+#refresh_token           = "ZhtR9hP-JWNl7z_VUxaXkSGycwUXFsWSnXbmMjORAb79s"   # private refresh token   
+                      # user email
+auth0_domain            = "netapp-cloud-account.auth0.com"                  # default auth0 domain
 
 # refresh_token           = ""   # private refresh token                               
 # client_id               = ""   # default auth0 id

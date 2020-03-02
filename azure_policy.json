@@ -1,5 +1,5 @@
 {
-    "Name": "OnCommand Cloud Manager Operator",
+    "Name": "FabianB-OCCMOps",
     "Actions": [
         "Microsoft.Compute/disks/delete",
         "Microsoft.Compute/disks/read",
@@ -78,6 +78,7 @@
     ],
     "NotActions": [],
     "AssignableScopes": [
+        "/subscriptions/04e10b5f-7248-43c5-a56c-7fce5c485f28"
     ],
     "Description": "OnCommand Cloud Manager Permissions",
     "IsCustom": "true"

@@ -51,10 +51,13 @@
         headers:
            Authorization: "{{token_type}} {{ token }}"
            Referer: Ansible
-        body: {"adminUser":{"email":"{{portalUserName}}"},"site":"{{site}}","company":"{{company}}"}
+        body: {"adminUser":{"email":"{{portalUserName}}"},"site":"{{site}}","company":"NetApp"}
         status_code: 200,204,202
         timeout: 180
       register: setup_response  
       ignore_errors: no
     - name: OCCM IP
       debug: msg=http://{{occm_ip}}  
+
+
+# {{company}}

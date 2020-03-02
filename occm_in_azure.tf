@@ -141,7 +141,7 @@ resource "azurerm_virtual_machine" "occmvm" {
     # User/Passowrd Authentication
     os_profile {
         computer_name  = "occmvm"
-        admin_username = "testadmin"
+        admin_username = "testuser"
         admin_password = "Password1234!"
     }
     
@@ -156,15 +156,19 @@ resource "azurerm_virtual_machine" "occmvm" {
 }
 
 
-#resource "null_resource" "ansible-provision" {
-#
-#  provisioner "local-exec" {
-#        command =<<EOF
-#        ansible-playbook '${var.ansible_provision_file}' --extra-vars 'occm_ip=${data.azurerm_public_ip.occmip.ip_address} \
-#                                                                        client_id=${var.client_id} \
-#                                                                        auth0_domain=${var.auth0_domain} \
-#                                                                        refToken=${var.refresh_token} \
-#                                                                        portalUserName=${var.portal_user_name}'
-#        EOF
-#  }
-#}  
+resource "null_resource" "ansible-provision" {
+
+  provisioner "local-exec" {
+        command =<<EOF
+        ansible-playbook '${var.ansible_provision_file}' --extra-vars 'occm_ip=${data.azurerm_public_ip.occmip.ip_address} \
+                                                                        client_id=${var.client_id} \
+                                                                        auth0_domain=${var.auth0_domain} \
+                                                                        refToken=${var.refresh_token} \
+                                                                        portalUserName=${var.portal_user_name}'
+        EOF
+  }
+}  
+
+
+
+#scp  testadmin@104.211.12.221:/opt/application/netapp/cloudmanager/log/server.log .
